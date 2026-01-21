@@ -1,212 +1,312 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loja TikTok Shop</title>
-<link rel="stylesheet" href="style.css">
-<script src="https://sdk.mercadopago.com/js/v2"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loja TikTok Shop</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- MercadoPago (pode manter) -->
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
+
+  <!-- QRCode (PIX Copia e Cola + QR) -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
 </head>
+
 <body>
 
-<header>
+  <header>
+    <img src="https://i.im.ge/2026/01/20/GYhUgy.tiktok.png" class="tiktok-icon" alt="TikTok" />
+    <h1>TikTok Shop</h1>
+    <img src="https://i.im.ge/2026/01/20/GY9qLJ.ttkshop2-Photoroom.png" class="shop-icon" alt="Shop" />
+  </header>
 
-  <img src="https://i.im.ge/2026/01/20/GYhUgy.tiktok.png" class="tiktok-icon">
-
-  <h1>
-    TikTok Shop
-    </h1>
-
-   <img src="https://i.im.ge/2026/01/20/GY9qLJ.ttkshop2-Photoroom.png" class="shop-icon">
-   <section class="trust-bar">
-</header>
-
-</header>
-
-
-<section class="trust-bar">
-  <div>🔒 Pagamento Seguro</div>
-  <div>🚚 Entrega Garantida</div>
-  <div>🔁 Devolução Fácil</div>
-  <div>💬 Suporte WhatsApp</div>
-</section>
-
-
-<main>
-  <section class="produtos">
-    <h2>Destaques</h2>
-    <div class="lista-produtos" id="lista-produtos"></div>
+  <section class="trust-bar">
+    <div>🔒 Pagamento Seguro</div>
+    <div>🚚 Entrega Garantida</div>
+    <div>🔁 Devolução Fácil</div>
+    <div>💬 Suporte WhatsApp</div>
   </section>
 
-  <!-- NOVA SEÇÃO -->
-  <section class="produtos">
-  <h2>🔥 Mais Vendidos</h2>
-  <div class="lista-produtos" id="lista-mais-vendidos"></div>
-</section>
+  <main>
+    <section class="produtos">
+      <h2>Destaques</h2>
+      <div class="lista-produtos" id="lista-produtos"></div>
+    </section>
 
+    <section class="produtos">
+      <h2>🔥 Mais Vendidos</h2>
+      <div class="lista-produtos" id="lista-mais-vendidos"></div>
+    </section>
 
-  <section class="comentarios">
-    <h2>Comentários dos Clientes</h2>
-    <div id="comentarios-list"></div>
-  </section>
-</main>
-
-
-<!-- Banner confiável -->
-<section class="banner">
-  <div class="banner-texto">
-    <h2>Compre com segurança e receba rápido!</h2>
-    <p>Pagamento seguro, garantia de entrega, suporte via WhatsApp e devolução garantida.</p>
-    <ul class="destaques">
-      <li>✅ Produtos Originais</li>
-      <li>✅ Suporte 24/7</li>
-      <li>✅ Entrega Rápida</li>
-      <li>✅ Devolução Garantida</li>
-    </ul>
+    <!-- AVALIAÇÕES REAIS (abaixo dos mais vendidos) -->
+<section class="reviews">
+  <div class="reviews-head">
+    <h2>⭐ Avaliações Reais</h2>
+    <span class="reviews-sub">Clientes verificados • Compra via PIX</span>
   </div>
+<div class="reviews-proof">
+  <div class="proof-left">
+    <div class="proof-score">4.9</div>
+    <div class="proof-stars">★★★★★</div>
+    <div class="proof-sub">Baseado em 1.200+ compras</div>
+  </div>
+
+  <div class="proof-right">
+    <div class="proof-pill">⚡ PIX confirma na hora</div>
+    <div class="proof-pill">📦 Envio rápido + rastreio</div>
+    <div class="proof-pill">🛡️ Suporte WhatsApp</div>
+  </div>
+</div>
+
+  <div class="reviews-list" id="reviews-list"></div>
 </section>
 
-<!-- Carrinho flutuante -->
-<div class="cart-flutuante" id="cart-flutuante">
-  🛒 <span id="cart-count">0</span>
-</div>
+  </main>
 
-<!-- Modal do carrinho com checkout -->
-<div class="cart-modal" id="cart-modal">
-  <h3>Seu Carrinho</h3>
-  <div id="cart-items"></div>
-  <p>Total: R$ <span id="cart-total">0.00</span></p>
-
-  <h4>Finalizar Compra</h4>
-  <form id="checkout-form">
-    <input type="text" name="nome" placeholder="Nome completo" required>
-    <input type="tel" name="telefone" placeholder="Telefone (WhatsApp)" required>
-    <input type="text" name="endereco" placeholder="Endereço" required>
-    <input type="text" name="cidade" placeholder="Cidade" required>
-    <input type="text" name="cep" placeholder="CEP" required>
-    <button type="submit">Enviar Pedido</button>
-  </form>
-  
-  <button id="close-cart">Fechar</button>
-</div>
-
-<!-- Modal produto -->
-<div class="product-modal" id="product-modal">
-  <div class="product-content" id="product-content">
-    <span id="close-product">&times;</span>
-    <h3 id="modal-title"></h3>
-    <img id="modal-img" src="" alt="">
-    <p id="modal-price"></p>
-    <p id="modal-description"></p>
-    <p id="modal-characteristics"></p>
-    <div id="modal-size-container" style="display:none;">
-      <label for="modal-size">Tamanho:</label>
-      <select id="modal-size"></select>
+  <section class="banner">
+    <div class="banner-texto">
+      <h2>Compre com segurança e receba rápido!</h2>
+      <p>Pagamento seguro, garantia de entrega, suporte via WhatsApp e devolução garantida.</p>
+      <ul class="destaques">
+        <li>✅ Produtos Originais</li>
+        <li>✅ Suporte 24/7</li>
+        <li>✅ Entrega Rápida</li>
+        <li>✅ Devolução Garantida</li>
+      </ul>
     </div>
-    <button id="add-to-cart-modal">Adicionar ao Carrinho</button>
-  </div>
-</div>
+  </section>
 
-<!-- Rodapé com selos de confiança -->
-<footer>
-  <h3>Compras 100% seguras</h3>
-  <div class="selos-rodape">
-    <img src="https://img.icons8.com/color/48/null/secured-letter.png" alt="Compra Segura" title="Compra Segura">
-    <img src="https://img.icons8.com/color/48/null/google-play.png" alt="Play Store" title="Play Store Verificado">
-    <img src="https://img.icons8.com/color/48/null/ssl.png" alt="SSL Seguro" title="Pagamento Protegido">
-    <img src="https://img.icons8.com/color/48/null/verified-account.png" alt="Verificado 2026" title="Verificado 2026">
+  <!-- Carrinho flutuante -->
+  <div class="cart-flutuante" id="cart-flutuante">
+    🛒 <span id="cart-count">0</span>
   </div>
-  <p>© 2026 TikTok Shop. Todos os direitos reservados.</p>
-</footer>
 
-<script src="script.js"></script>
+  <!-- Modal do carrinho -->
+  <div class="cart-modal" id="cart-modal">
+    <div class="cart-header">
+      <h3>Seu Carrinho</h3>
+      <span class="cart-badge">Compra protegida</span>
+    </div>
+
+    <div id="cart-items"></div>
+
+    <div class="cart-resumo">
+      <div class="row">
+        <span>Subtotal</span>
+        <span>R$ <b id="cart-subtotal">0.00</b></span>
+      </div>
+
+      <div class="row">
+        <span>Frete (Correios)</span>
+        <span>R$ <b id="cart-frete">20.00</b></span>
+      </div>
+
+      <div class="row total">
+        <span>Total</span>
+        <span>R$ <b id="cart-total">0.00</b></span>
+      </div>
+
+      <div class="cart-trust-mini">
+        <div>⚡ PIX cai em segundos</div>
+        <div>📦 Código de rastreio após envio</div>
+        <div>🛡️ Suporte WhatsApp</div>
+      </div>
+    </div>
+
+    <!-- PASSO 1: ENTREGA -->
+    <div class="step-box" id="step-entrega">
+      <div class="step-title">
+        <span class="step-pill">PASSO 1</span>
+        <h4>Dados de Entrega</h4>
+      </div>
+
+      <p class="step-sub">Preencha para liberar o pagamento via PIX.</p>
+
+      <form id="checkout-form" class="form-entrega">
+        <div class="grid">
+          <div class="field">
+            <label>Nome completo</label>
+            <input type="text" name="nome" placeholder="Ex: João Silva" required />
+          </div>
+
+          <div class="field">
+            <label>WhatsApp</label>
+            <input type="tel" name="telefone" placeholder="(DDD) 99999-9999" required />
+          </div>
+
+          <div class="field full">
+            <label>Endereço</label>
+            <input type="text" name="endereco" placeholder="Rua, número, bairro, complemento" required />
+          </div>
+
+          <div class="field">
+            <label>Cidade</label>
+            <input type="text" name="cidade" placeholder="Ex: São Paulo" required />
+          </div>
+
+          <div class="field">
+            <label>CEP</label>
+            <input type="text" name="cep" placeholder="00000-000" required />
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary">
+          Continuar para pagamento PIX
+        </button>
+
+        <small class="form-hint">
+          🔒 Seus dados são usados somente para envio. Frete fixo <b>R$ 20,00</b> (Correios).
+        </small>
+      </form>
+    </div>
+
+    <!-- PASSO 2: PIX (COMEÇA OCULTO) -->
+    <div class="step-box hidden" id="step-pix">
+      <div class="step-title">
+        <span class="step-pill">PASSO 2</span>
+        <h4>Pagamento via PIX</h4>
+      </div>
+
+      <p class="step-sub">
+        Escaneie o QRCode ou copie o código. Assim que pagar, clique em “Já paguei”.
+      </p>
+
+      <div class="pix-box" id="pix-box">
+        <div class="pix-top">
+          <div class="pix-flag">✅ PIX disponível</div>
+          <div class="pix-time" id="pix-timer">⏳ Promoção por tempo limitado</div>
+        </div>
+
+        <div class="pix-qr">
+          <canvas id="pix-qrcode" width="220" height="220"></canvas>
+        </div>
+
+        <label class="pix-label">PIX Copia e Cola</label>
+        <textarea id="pix-copia-cola" readonly></textarea>
+
+        <div class="pix-actions">
+          <button type="button" id="btn-copiar-pix">Copiar código PIX</button>
+          <button type="button" class="btn-secondary" id="btn-ja-paguei">Já paguei</button>
+        </div>
+
+        <div class="pix-safe">
+          <div>🔒 Ambiente seguro</div>
+          <div>📌 Confirme o valor antes de pagar</div>
+          <div>🧾 Envie comprovante no WhatsApp</div>
+        </div>
+      </div>
+
+      <button id="close-cart" class="cart-close">Fechar</button>
+    </div>
+
+    <!-- Se o usuário não chegou no pix ainda, o botão fechar fica aqui -->
+    <button id="close-cart-fallback" class="cart-close fallback">Fechar</button>
+  </div>
+
+  <!-- Modal produto -->
+  <div class="product-modal" id="product-modal">
+    <div class="product-content" id="product-content">
+      <button class="seta esquerda" id="prev-img" type="button">❮</button>
+
+      <span id="close-product" role="button" aria-label="Fechar">&times;</span>
+
+      <h3 id="modal-title"></h3>
+
+      <div class="modal-image-wrapper">
+        <img id="modal-img" src="" alt="Produto" />
+      </div>
+
+      <button class="seta direita" id="next-img" type="button">❯</button>
+
+      <p id="modal-price"></p>
+      <p id="modal-description"></p>
+      <p id="modal-characteristics"></p>
+
+      <div id="modal-size-container" style="display:none;">
+        <label for="modal-size">Tamanho:</label>
+        <select id="modal-size"></select>
+      </div>
+
+      <button id="add-to-cart-modal" type="button">Adicionar ao Carrinho</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <h4>ATENDIMENTO AO CLIENTE</h4>
+        <ul>
+          <li>Central de Ajuda</li>
+          <li>Como Comprar</li>
+          <li>Métodos de Pagamento</li>
+          <li>Garantia TikTok Shop</li>
+          <li>Devolução e Reembolso</li>
+          <li>Fale Conosco</li>
+          <li>Ouvidoria</li>
+          <li>Preferências de Cookies</li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>SOBRE A TIKTOK SHOP</h4>
+        <ul>
+          <li>Sobre Nós</li>
+          <li>Políticas</li>
+          <li>Política de Privacidade</li>
+          <li>Programa de Afiliados</li>
+          <li>Vender na TikTok Shop</li>
+          <li>Ofertas Relâmpago</li>
+          <li>Blog</li>
+          <li>Imprensa</li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>PAGAMENTO</h4>
+        <div class="payment-icons">
+          <img src="https://img.icons8.com/color/48/pix.png" alt="Pix" />
+          <img src="https://img.icons8.com/color/48/visa.png" alt="Visa" />
+          <img src="https://img.icons8.com/color/48/mastercard.png" alt="Mastercard" />
+          <img src="https://img.icons8.com/color/48/amex.png" alt="Amex" />
+          <img src="https://img.icons8.com/color/48/boleto-bankario.png" alt="Boleto" />
+          <img src="https://img.icons8.com/color/48/paypal.png" alt="PayPal" />
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>SIGA-NOS</h4>
+        <div class="social-icons">
+          <img src="https://img.icons8.com/color/48/instagram-new.png" alt="Instagram" />
+          <img src="https://img.icons8.com/color/48/tiktok.png" alt="TikTok" />
+          <img src="https://img.icons8.com/color/48/whatsapp.png" alt="WhatsApp" />
+          <img src="https://img.icons8.com/color/48/facebook.png" alt="Facebook" />
+          <img src="https://img.icons8.com/color/48/linkedin.png" alt="LinkedIn" />
+        </div>
+
+        <h4 style="margin-top:20px">BAIXAR APP</h4>
+        <div class="app-icons">
+          <img src="https://img.icons8.com/color/96/google-play.png" alt="Google Play" />
+          <img src="https://img.icons8.com/color/96/apple-app-store.png" alt="App Store" />
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-trust">
+      <img src="https://img.icons8.com/color/48/secured-letter.png" alt="Compra Segura" />
+      <img src="https://img.icons8.com/color/48/google-play.png" alt="Play Store" />
+      <img src="https://img.icons8.com/color/48/ssl.png" alt="SSL" />
+      <img src="https://img.icons8.com/color/48/verified-account.png" alt="Verificado" />
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 TikTok Shop. Todos os direitos reservados.</p>
+      <p>CNPJ/MF nº 35.635.824/0001-12 · Av. Brigadeiro Faria Lima, 3732 - Itaim Bibi, São Paulo (SP)</p>
+      <p>Usamos cookies para melhorar sua experiência. Consulte nossa Política de Privacidade.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
-
-<footer class="footer">
-  <div class="footer-container">
-
-    <!-- COLUNA 1 -->
-    <div class="footer-col">
-      <h4>ATENDIMENTO AO CLIENTE</h4>
-      <ul>
-        <li>Central de Ajuda</li>
-        <li>Como Comprar</li>
-        <li>Métodos de Pagamento</li>
-        <li>Garantia TikTok Shop</li>
-        <li>Devolução e Reembolso</li>
-        <li>Fale Conosco</li>
-        <li>Ouvidoria</li>
-        <li>Preferências de Cookies</li>
-      </ul>
-    </div>
-
-    <!-- COLUNA 2 -->
-    <div class="footer-col">
-      <h4>SOBRE A TIKTOK SHOP</h4>
-      <ul>
-        <li>Sobre Nós</li>
-        <li>Políticas</li>
-        <li>Política de Privacidade</li>
-        <li>Programa de Afiliados</li>
-        <li>Vender na TikTok Shop</li>
-        <li>Ofertas Relâmpago</li>
-        <li>Blog</li>
-        <li>Imprensa</li>
-      </ul>
-    </div>
-
-    <!-- COLUNA 3 -->
-    <div class="footer-col">
-      <h4>PAGAMENTO</h4>
-      <div class="payment-icons">
-        <img src="https://img.icons8.com/color/48/pix.png">
-        <img src="https://img.icons8.com/color/48/visa.png">
-        <img src="https://img.icons8.com/color/48/mastercard.png">
-        <img src="https://img.icons8.com/color/48/amex.png">
-        <img src="https://img.icons8.com/color/48/boleto-bankario.png">
-        <img src="https://img.icons8.com/color/48/paypal.png">
-      </div>
-    </div>
-
-    <!-- COLUNA 4 -->
-    <div class="footer-col">
-      <h4>SIGA-NOS</h4>
-      <div class="social-icons">
-        <img src="https://img.icons8.com/color/48/instagram-new.png">
-        <img src="https://img.icons8.com/color/48/tiktok.png">
-        <img src="https://img.icons8.com/color/48/whatsapp.png">
-        <img src="https://img.icons8.com/color/48/facebook.png">
-        <img src="https://img.icons8.com/color/48/linkedin.png">
-      </div>
-
-      <h4 style="margin-top:20px">BAIXAR APP</h4>
-      <div class="app-icons">
-        <img src="https://img.icons8.com/color/96/google-play.png">
-        <img src="https://img.icons8.com/color/96/apple-app-store.png">
-      </div>
-    </div>
-
-  </div>
-
-  <!-- SEL0S -->
-  <div class="footer-trust">
-    <img src="https://img.icons8.com/color/48/secured-letter.png">
-    <img src="https://img.icons8.com/color/48/google-play.png">
-    <img src="https://img.icons8.com/color/48/ssl.png">
-    <img src="https://img.icons8.com/color/48/verified-account.png">
-  </div>
-
-  <!-- INFO LEGAL -->
-  <div class="footer-bottom">
-    <p>© 2026 TikTok Shop. Todos os direitos reservados.</p>
-    <p>
-      CNPJ/MF nº 35.635.824/0001-12 ·
-      Av. Brigadeiro Faria Lima, 3732 - Itaim Bibi, São Paulo (SP)
-    </p>
-    <p>
-      Usamos cookies para melhorar sua experiência. Consulte nossa Política de Privacidade.
-    </p>
-  </div>
-</footer>
-
