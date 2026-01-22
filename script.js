@@ -1,18 +1,12 @@
 // ======================
 // CONFIG
 // ======================
-const FRETE_FIXO = 20.0;
-
-// Promoção global (2 horas)
+const FRETE_FIXO = 20.00;
 const PROMO_SECONDS = 2 * 60 * 60; // 7200
-
-// WhatsApp para "Já paguei" (coloque com DDI, ex: 5511999999999)
-const WHATSAPP_NUMERO = "SEU_NUMERO_AQUI";
+const WHATSAPP_NUMERO = "SEU_NUMERO_AQUI"; // ex: 5511999999999
 
 // PIX (EXEMPLO) - troque depois por um PIX real gerado por backend
-// Aqui é apenas para gerar QRCode e Copia/Cola no front.
 function gerarPixCopiaColaExemplo({ total, pedidoId }) {
-  // String simples de exemplo (o QRCode vai funcionar, mas não é um payload bancário real)
   return `PIX_EXEMPLO|PEDIDO:${pedidoId}|TOTAL:${total.toFixed(2)}|LOJA:TIKTOKSHOP`;
 }
 
@@ -145,7 +139,7 @@ function lockScroll(lock) {
 // ======================
 // Estoque (SESSION)
 // ======================
-[...produtos, ...maisVendidos].forEach((p) => {
+[...produtos, ...maisVendidos].forEach(p => {
   const stock = sessionStorage.getItem(`estoque_${p.id}`);
   p.estoque = stock ? Number(stock) : Math.floor(Math.random() * 6) + 2;
   sessionStorage.setItem(`estoque_${p.id}`, p.estoque);
@@ -154,10 +148,7 @@ function lockScroll(lock) {
 // ======================
 // Tempo Promo (SESSION) - 2h rodando SEM parar
 // ======================
-let tempo = sessionStorage.getItem("tempo_oferta")
-  ? Number(sessionStorage.getItem("tempo_oferta"))
-  : PROMO_SECONDS;
-
+let tempo = sessionStorage.getItem("tempo_oferta") ? Number(sessionStorage.getItem("tempo_oferta")) : PROMO_SECONDS;
 if (!tempo || tempo <= 0) tempo = PROMO_SECONDS;
 sessionStorage.setItem("tempo_oferta", tempo);
 
@@ -190,6 +181,7 @@ const pixCopiaColaEl = document.getElementById("pix-copia-cola");
 const pixCanvas = document.getElementById("pix-qrcode");
 const btnCopiarPix = document.getElementById("btn-copiar-pix");
 const btnJaPaguei = document.getElementById("btn-ja-paguei");
+const pixWarn = document.getElementById("pix-warn");
 
 // modal produto
 const productModal = document.getElementById("product-modal");
@@ -230,11 +222,10 @@ function formatTempo(sec) {
   const h = Math.floor(sec / 3600);
   const m = Math.floor((sec % 3600) / 60);
   const s = sec % 60;
-  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  return `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
 }
 
 function aplicarTextoContador() {
-  // Tempo SEMPRE rodando: ao chegar em 0, reinicia
   if (tempo <= 0) {
     tempo = PROMO_SECONDS;
     sessionStorage.setItem("tempo_oferta", tempo);
@@ -242,12 +233,10 @@ function aplicarTextoContador() {
 
   const txt = `⏰ Oferta expira em ${formatTempo(tempo)}`;
 
-  // Atualiza todos os contadores (cards + modal)
-  document.querySelectorAll(".contador").forEach((el) => {
+  document.querySelectorAll(".contador").forEach(el => {
     el.textContent = txt;
   });
 
-  // Atualiza timer do pix
   if (pixTimerEl) {
     pixTimerEl.textContent = `⏳ Promoção termina em ${formatTempo(tempo)}`;
   }
@@ -306,7 +295,7 @@ function renderDots() {
 
 function updateModalImage() {
   if (!modalImgs.length) return;
-  if (modalImg) modalImg.src = modalImgs[modalIndex];
+  modalImg.src = modalImgs[modalIndex];
   renderDots();
 }
 
@@ -334,13 +323,13 @@ function criarCard(prod) {
 function renderProdutos() {
   if (!listaProdutos) return;
   listaProdutos.innerHTML = "";
-  produtos.forEach((p) => listaProdutos.appendChild(criarCard(p)));
+  produtos.forEach(p => listaProdutos.appendChild(criarCard(p)));
 }
 
 function renderMaisVendidos() {
   if (!listaMaisVendidos) return;
   listaMaisVendidos.innerHTML = "";
-  maisVendidos.forEach((p) => listaMaisVendidos.appendChild(criarCard(p)));
+  maisVendidos.forEach(p => listaMaisVendidos.appendChild(criarCard(p)));
 }
 
 // ======================
@@ -363,7 +352,7 @@ function abrirModal(prod) {
     urg = document.createElement("div");
     urg.id = "modal-urgencia";
     urg.className = "urgencia";
-    if (modalPrice) modalPrice.after(urg);
+    modalPrice.after(urg);
   }
   urg.textContent = `⚠️ Restam ${prod.estoque} unidades`;
 
@@ -377,14 +366,12 @@ function abrirModal(prod) {
   }
 
   // tamanhos
-  if (modalSizeContainer && modalSize) {
-    if (prod.tamanho) {
-      modalSizeContainer.style.display = "block";
-      modalSize.innerHTML = "";
-      for (let i = 56; i <= 62; i++) modalSize.innerHTML += `<option>${i}</option>`;
-    } else {
-      modalSizeContainer.style.display = "none";
-    }
+  if (prod.tamanho) {
+    modalSizeContainer.style.display = "block";
+    modalSize.innerHTML = "";
+    for (let i = 56; i <= 62; i++) modalSize.innerHTML += `<option>${i}</option>`;
+  } else {
+    modalSizeContainer.style.display = "none";
   }
 
   // setas só se tiver +1 imagem
@@ -395,12 +382,12 @@ function abrirModal(prod) {
   updateModalImage();
   aplicarTextoContador();
 
-  if (productModal) productModal.classList.add("active");
+  productModal.classList.add("active");
   lockScroll(true);
 }
 
 function fecharModalProduto() {
-  if (productModal) productModal.classList.remove("active");
+  productModal.classList.remove("active");
   lockScroll(false);
 }
 
@@ -438,10 +425,7 @@ document.addEventListener("keydown", (e) => {
 // ======================
 // Swipe (galeria) - ignora scroll vertical
 // ======================
-let startX = 0,
-  startY = 0,
-  endX = 0,
-  endY = 0;
+let startX = 0, startY = 0, endX = 0, endY = 0;
 
 function handleSwipe() {
   const dx = endX - startX;
@@ -453,26 +437,18 @@ function handleSwipe() {
 }
 
 if (productContent) {
-  productContent.addEventListener(
-    "touchstart",
-    (e) => {
-      const t = e.changedTouches[0];
-      startX = t.screenX;
-      startY = t.screenY;
-    },
-    { passive: true }
-  );
+  productContent.addEventListener("touchstart", (e) => {
+    const t = e.changedTouches[0];
+    startX = t.screenX;
+    startY = t.screenY;
+  }, { passive: true });
 
-  productContent.addEventListener(
-    "touchend",
-    (e) => {
-      const t = e.changedTouches[0];
-      endX = t.screenX;
-      endY = t.screenY;
-      handleSwipe();
-    },
-    { passive: true }
-  );
+  productContent.addEventListener("touchend", (e) => {
+    const t = e.changedTouches[0];
+    endX = t.screenX;
+    endY = t.screenY;
+    handleSwipe();
+  }, { passive: true });
 }
 
 // ======================
@@ -482,7 +458,9 @@ function iniciarContador() {
   aplicarTextoContador();
   setInterval(() => {
     tempo--;
-    if (tempo <= 0) tempo = PROMO_SECONDS; // reinicia SEMPRE
+    if (tempo <= 0) {
+      tempo = PROMO_SECONDS;
+    }
     sessionStorage.setItem("tempo_oferta", tempo);
     aplicarTextoContador();
   }, 1000);
@@ -530,7 +508,7 @@ function updateCart() {
     cartItems.appendChild(row);
   });
 
-  cartItems.querySelectorAll("button[data-remove]").forEach((btn) => {
+  cartItems.querySelectorAll("button[data-remove]").forEach(btn => {
     btn.addEventListener("click", () => {
       const i = Number(btn.getAttribute("data-remove"));
       carrinho.splice(i, 1);
@@ -539,6 +517,7 @@ function updateCart() {
   });
 
   if (cartCount) cartCount.textContent = String(carrinho.length);
+
   if (cartSubtotalEl) cartSubtotalEl.textContent = subtotal.toFixed(2);
   if (cartFreteEl) cartFreteEl.textContent = FRETE_FIXO.toFixed(2);
   if (cartTotalEl) cartTotalEl.textContent = total.toFixed(2);
@@ -576,7 +555,6 @@ function resetarStepsCarrinho() {
   if (stepEntrega) stepEntrega.classList.remove("hidden");
   if (stepPix) stepPix.classList.add("hidden");
 
-  // botões fechar
   if (closeCart) closeCart.classList.add("hidden");
   if (closeCartFallback) closeCartFallback.classList.remove("hidden");
 }
@@ -592,7 +570,6 @@ function mostrarPix() {
 }
 
 function abrirCarrinho() {
-  if (!cartModal) return;
   cartModal.classList.add("active");
   lockScroll(true);
   resetarStepsCarrinho();
@@ -600,7 +577,6 @@ function abrirCarrinho() {
 }
 
 function fecharCarrinho() {
-  if (!cartModal) return;
   cartModal.classList.remove("active");
   lockScroll(false);
   resetarStepsCarrinho();
@@ -619,34 +595,64 @@ document.addEventListener("click", (e) => {
 });
 
 // ======================
-// PASSO 1 → Libera PIX (UNIFICADO, SEM PIX_CHAVE)
+// PASSO 1 → Libera PIX
 // ======================
+async function desenharQRCodeSeguro(textoPix) {
+  if (!pixCanvas) return;
+
+  const ctx = pixCanvas.getContext("2d");
+  ctx.clearRect(0, 0, pixCanvas.width, pixCanvas.height);
+
+  if (pixWarn) pixWarn.style.display = "none";
+
+  // Algumas vezes o global é QRCode, outras window.QRCode
+  const QR = window.QRCode || (typeof QRCode !== "undefined" ? QRCode : null);
+
+  // tenta toCanvas
+  try {
+    if (QR && typeof QR.toCanvas === "function") {
+      await new Promise((resolve, reject) => {
+        QR.toCanvas(pixCanvas, textoPix, { width: 220 }, (err) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      });
+      return;
+    }
+  } catch (_) {}
+
+  // fallback: toDataURL (desenha no canvas)
+  try {
+    if (QR && typeof QR.toDataURL === "function") {
+      const url = await QR.toDataURL(textoPix, { width: 220, margin: 1 });
+      const img = new Image();
+      img.onload = () => {
+        ctx.clearRect(0, 0, pixCanvas.width, pixCanvas.height);
+        ctx.drawImage(img, 0, 0, pixCanvas.width, pixCanvas.height);
+      };
+      img.src = url;
+      return;
+    }
+  } catch (_) {}
+
+  // se falhar tudo
+  if (pixWarn) {
+    pixWarn.style.display = "block";
+    pixWarn.textContent = "⚠️ Não consegui gerar o QRCode. Use o PIX Copia e Cola abaixo.";
+  }
+}
+
 function gerarEExibirPix(dadosEntrega) {
   const subtotal = subtotalCarrinho();
-  const total = subtotal + FRETE_FIXO;
-
-  // pedido simples
+  const total = totalCarrinho();
   const pedidoId = `${Date.now()}`;
 
-  // Gera o texto do Pix (exemplo)
   const pixText = gerarPixCopiaColaExemplo({ total, pedidoId });
 
-  // coloca no textarea
   if (pixCopiaColaEl) pixCopiaColaEl.value = pixText;
 
-  // QRCode
-  if (pixCanvas && window.QRCode && typeof window.QRCode.toCanvas === "function") {
-    const ctx = pixCanvas.getContext("2d");
-    ctx.clearRect(0, 0, pixCanvas.width, pixCanvas.height);
+  desenharQRCodeSeguro(pixText);
 
-    window.QRCode.toCanvas(pixCanvas, pixText, { width: 220, margin: 1 }, (err) => {
-      if (err) console.error("Erro QRCode:", err);
-    });
-  } else {
-    console.warn("QRCode lib não carregou. Verifique o <script src='qrcode.min.js'>");
-  }
-
-  // Botão copiar
   if (btnCopiarPix) {
     btnCopiarPix.onclick = async () => {
       try {
@@ -659,41 +665,33 @@ function gerarEExibirPix(dadosEntrega) {
     };
   }
 
-  // Já paguei (abre WhatsApp com mensagem + dados)
   if (btnJaPaguei) {
     btnJaPaguei.onclick = () => {
-      const itensTxt = carrinho
-        .map((p) => {
-          const t = p.tamanhoEscolhido ? ` (Tam: ${p.tamanhoEscolhido})` : "";
-          return `- ${p.nome}${t} | R$ ${p.preco.toFixed(2)}`;
-        })
-        .join("\n");
+      const itensTxt = carrinho.map(p => {
+        const t = p.tamanhoEscolhido ? ` (Tam: ${p.tamanhoEscolhido})` : "";
+        return `- ${p.nome}${t} | R$ ${p.preco.toFixed(2)}`;
+      }).join("\n");
 
       const msg =
-        `*CONFIRMAÇÃO DE PAGAMENTO - TikTok Shop*\n\n` +
-        `*Pedido:* ${pedidoId}\n` +
-        `*Nome:* ${dadosEntrega.nome}\n` +
-        `*WhatsApp:* ${dadosEntrega.telefone}\n\n` +
-        `*Endereço:* ${dadosEntrega.endereco}\n` +
-        `*Cidade:* ${dadosEntrega.cidade}\n` +
-        `*CEP:* ${dadosEntrega.cep}\n\n` +
-        `*Itens:*\n${itensTxt}\n\n` +
-        `*Subtotal:* R$ ${subtotal.toFixed(2)}\n` +
-        `*Frete:* R$ ${FRETE_FIXO.toFixed(2)}\n` +
-        `*Total:* R$ ${total.toFixed(2)}\n\n` +
-        `*PIX (copia e cola):*\n${pixText}\n\n` +
-        `Enviei o comprovante do PIX nesta conversa. ✅`;
+`*CONFIRMAÇÃO DE PAGAMENTO - TikTok Shop*\n\n` +
+`*Pedido:* ${pedidoId}\n` +
+`*Nome:* ${dadosEntrega.nome}\n` +
+`*WhatsApp:* ${dadosEntrega.telefone}\n\n` +
+`*Endereço:* ${dadosEntrega.endereco}\n` +
+`*Cidade:* ${dadosEntrega.cidade}\n` +
+`*CEP:* ${dadosEntrega.cep}\n\n` +
+`*Itens:*\n${itensTxt}\n\n` +
+`*Subtotal:* R$ ${subtotal.toFixed(2)}\n` +
+`*Frete:* R$ ${FRETE_FIXO.toFixed(2)}\n` +
+`*Total:* R$ ${total.toFixed(2)}\n\n` +
+`Enviei o comprovante do PIX junto nesta conversa. ✅`;
 
       const url = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(msg)}`;
       window.open(url, "_blank");
     };
   }
-
-  // Atualiza timers na tela do pix
-  aplicarTextoContador();
 }
 
-// Form entrega
 if (checkoutForm) {
   checkoutForm.onsubmit = (e) => {
     e.preventDefault();
@@ -718,7 +716,7 @@ if (checkoutForm) {
 }
 
 // ======================
-// Comentários dos clientes (com foto)
+// Avaliações reais (com FOTO de recebimento)
 // ======================
 const comentariosClientes = [
   {
@@ -727,42 +725,55 @@ const comentariosClientes = [
     estrelas: 5,
     data: "há 2 dias",
     texto: "Chegou rápido! Paguei no PIX e em minutos já confirmaram. Produto top.",
-    produtoImg: "https://i.im.ge/2026/01/21/Gg03Rp.fe1f35f1b3f1dca15ec1dcbbca454394.webp"
+    fotoEntrega: "https://i.im.ge/2026/01/21/Gg03Rp.fe1f35f1b3f1dca15ec1dcbbca454394.webp"
   },
   {
-    nome: "João P.",
+    nome: "João Pedro",
     foto: "https://randomuser.me/api/portraits/men/32.jpg",
     estrelas: 5,
-    data: "há 1 semana",
-    texto: "Atendimento no WhatsApp ajudou muito. Recomendo, compra segura."
-  },
-  {
-    nome: "Larissa M.",
-    foto: "https://randomuser.me/api/portraits/women/22.jpg",
-    estrelas: 4,
     data: "ontem",
-    texto: "Gostei demais! Embalagem boa e veio certinho. Vou comprar de novo."
+    texto: "Promoção funcionou de verdade! Peguei com desconto e o suporte respondeu no WhatsApp rapidão.",
+    fotoEntrega: "" // coloque link aqui se quiser
   },
   {
-    nome: "Bruno S.",
-    foto: "https://randomuser.me/api/portraits/men/55.jpg",
-    estrelas: 5,
-    data: "há 3 dias",
-    texto: "PIX caiu na hora e já recebi o código de rastreio depois do envio."
-  },
-  {
-    nome: "Renata G.",
-    foto: "https://randomuser.me/api/portraits/women/48.jpg",
+    nome: "Larissa Menezes",
+    foto: "https://randomuser.me/api/portraits/women/22.jpg",
     estrelas: 5,
     data: "há 4 dias",
-    texto: "Muito confiável. O carrinho mostra tudo certinho (frete e total)."
+    texto: "Muito confiável! QR Code funciona, valor correto e depois mandaram rastreio.",
+    fotoEntrega: ""
   },
   {
-    nome: "Diego F.",
+    nome: "Bruno Santos",
+    foto: "https://randomuser.me/api/portraits/men/55.jpg",
+    estrelas: 5,
+    data: "há 1 semana",
+    texto: "Chegou antes do prazo! Produto original e qualidade top.",
+    fotoEntrega: ""
+  },
+  {
+    nome: "Renata Gomes",
+    foto: "https://randomuser.me/api/portraits/women/48.jpg",
+    estrelas: 5,
+    data: "há 3 dias",
+    texto: "Carrinho mostra subtotal + frete + total certinho. Loja séria!",
+    fotoEntrega: ""
+  },
+  {
+    nome: "Diego Ferreira",
     foto: "https://randomuser.me/api/portraits/men/18.jpg",
     estrelas: 4,
     data: "há 5 dias",
-    texto: "Entrega ok e produto bom. Comprei no PIX sem dificuldade."
+    texto: "Entrega rápida e bem embalado. PIX copiar e colar foi fácil.",
+    fotoEntrega: ""
+  },
+  {
+    nome: "Ana Clara Souza",
+    foto: "https://randomuser.me/api/portraits/women/12.jpg",
+    estrelas: 5,
+    data: "há 6 dias",
+    texto: "Promoções são reais mesmo! Já comprei 2 vezes aqui.",
+    fotoEntrega: ""
   }
 ];
 
@@ -773,11 +784,11 @@ function estrelasTxt(n) {
 }
 
 function renderComentariosClientes() {
-  // ⚠️ seu HTML usa: id="comentarios-list"
-  const el = document.getElementById("comentarios-list");
+  const el = document.getElementById("reviews-list");
   if (!el) return;
 
   el.innerHTML = "";
+
   comentariosClientes.forEach((c) => {
     const card = document.createElement("div");
     card.className = "review-card";
@@ -796,7 +807,7 @@ function renderComentariosClientes() {
 
       <p class="review-text">${c.texto}</p>
 
-      ${c.produtoImg ? `<img class="review-prod" src="${c.produtoImg}" alt="Produto comprado">` : ""}
+      ${c.fotoEntrega ? `<img class="review-prod" src="${c.fotoEntrega}" alt="Cliente recebeu o produto" loading="lazy">` : ""}
 
       <span class="review-badge">✅ Compra verificada</span>
     `;

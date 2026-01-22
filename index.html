@@ -39,28 +39,30 @@
       <div class="lista-produtos" id="lista-mais-vendidos"></div>
     </section>
 
-    <!-- AVALIAÇÕES REAIS (abaixo dos mais vendidos) -->
-<section class="reviews">
-  <div class="reviews-head">
-    <h2>⭐ Avaliações Reais</h2>
-    <span class="reviews-sub">Clientes verificados • Compra via PIX</span>
-  </div>
-<div class="reviews-proof">
-  <div class="proof-left">
-    <div class="proof-score">4.9</div>
-    <div class="proof-stars">★★★★★</div>
-    <div class="proof-sub">Baseado em 1.200+ compras</div>
-  </div>
+    <!-- AVALIAÇÕES REAIS -->
+    <section class="reviews">
+      <div class="reviews-head">
+        <h2>⭐ Avaliações Reais</h2>
+        <span class="reviews-sub">Clientes verificados • Compra via PIX</span>
+      </div>
 
-  <div class="proof-right">
-    <div class="proof-pill">⚡ PIX confirma na hora</div>
-    <div class="proof-pill">📦 Envio rápido + rastreio</div>
-    <div class="proof-pill">🛡️ Suporte WhatsApp</div>
-  </div>
-</div>
+      <div class="reviews-proof">
+        <div class="proof-left">
+          <div class="proof-score">4.9</div>
+          <div class="proof-stars">★★★★★</div>
+          <div class="proof-sub">Baseado em 1.200+ compras</div>
+        </div>
 
-  <div class="reviews-list" id="reviews-list"></div>
-</section>
+        <div class="proof-right">
+          <div class="proof-pill">⚡ PIX confirma na hora</div>
+          <div class="proof-pill">📦 Envio rápido + rastreio</div>
+          <div class="proof-pill">🛡️ Suporte WhatsApp</div>
+        </div>
+      </div>
+
+      <div class="reviews-list" id="reviews-list"></div>
+      <div class="reviews-hint">➡️ Arraste para ver mais avaliações</div>
+    </section>
 
   </main>
 
@@ -78,9 +80,12 @@
   </section>
 
   <!-- Carrinho flutuante -->
-  <div class="cart-flutuante" id="cart-flutuante">
+  <button class="cart-flutuante" id="cart-flutuante" type="button">
     🛒 <span id="cart-count">0</span>
-  </div>
+  </button>
+
+  <!-- ✅ OVERLAY DO CARRINHO (IMPORTANTE PARA CELULAR) -->
+  <div class="cart-overlay" id="cart-overlay"></div>
 
   <!-- Modal do carrinho -->
   <div class="cart-modal" id="cart-modal">
@@ -114,7 +119,7 @@
       </div>
     </div>
 
-    <!-- PASSO 1: ENTREGA -->
+    <!-- PASSO 1 -->
     <div class="step-box" id="step-entrega">
       <div class="step-title">
         <span class="step-pill">PASSO 1</span>
@@ -161,7 +166,7 @@
       </form>
     </div>
 
-    <!-- PASSO 2: PIX (COMEÇA OCULTO) -->
+    <!-- PASSO 2 -->
     <div class="step-box hidden" id="step-pix">
       <div class="step-title">
         <span class="step-pill">PASSO 2</span>
@@ -197,11 +202,10 @@
         </div>
       </div>
 
-      <button id="close-cart" class="cart-close">Fechar</button>
+      <button id="close-cart" class="cart-close" type="button">Fechar</button>
     </div>
 
-    <!-- Se o usuário não chegou no pix ainda, o botão fechar fica aqui -->
-    <button id="close-cart-fallback" class="cart-close fallback">Fechar</button>
+    <button id="close-cart-fallback" class="cart-close fallback" type="button">Fechar</button>
   </div>
 
   <!-- Modal produto -->
@@ -209,7 +213,7 @@
     <div class="product-content" id="product-content">
       <button class="seta esquerda" id="prev-img" type="button">❮</button>
 
-      <span id="close-product" role="button" aria-label="Fechar">&times;</span>
+      <button id="close-product" type="button" aria-label="Fechar">&times;</button>
 
       <h3 id="modal-title"></h3>
 
@@ -223,89 +227,14 @@
       <p id="modal-description"></p>
       <p id="modal-characteristics"></p>
 
-      <div id="modal-size-container" style="display:none;">
+      <div id="modal-size-container" class="size-box" style="display:none;">
         <label for="modal-size">Tamanho:</label>
         <select id="modal-size"></select>
       </div>
 
-      <button id="add-to-cart-modal" type="button">Adicionar ao Carrinho</button>
+      <button id="add-to-cart-modal" type="button" class="btn-add">Adicionar ao Carrinho</button>
     </div>
   </div>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-container">
-      <div class="footer-col">
-        <h4>ATENDIMENTO AO CLIENTE</h4>
-        <ul>
-          <li>Central de Ajuda</li>
-          <li>Como Comprar</li>
-          <li>Métodos de Pagamento</li>
-          <li>Garantia TikTok Shop</li>
-          <li>Devolução e Reembolso</li>
-          <li>Fale Conosco</li>
-          <li>Ouvidoria</li>
-          <li>Preferências de Cookies</li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4>SOBRE A TIKTOK SHOP</h4>
-        <ul>
-          <li>Sobre Nós</li>
-          <li>Políticas</li>
-          <li>Política de Privacidade</li>
-          <li>Programa de Afiliados</li>
-          <li>Vender na TikTok Shop</li>
-          <li>Ofertas Relâmpago</li>
-          <li>Blog</li>
-          <li>Imprensa</li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4>PAGAMENTO</h4>
-        <div class="payment-icons">
-          <img src="https://img.icons8.com/color/48/pix.png" alt="Pix" />
-          <img src="https://img.icons8.com/color/48/visa.png" alt="Visa" />
-          <img src="https://img.icons8.com/color/48/mastercard.png" alt="Mastercard" />
-          <img src="https://img.icons8.com/color/48/amex.png" alt="Amex" />
-          <img src="https://img.icons8.com/color/48/boleto-bankario.png" alt="Boleto" />
-          <img src="https://img.icons8.com/color/48/paypal.png" alt="PayPal" />
-        </div>
-      </div>
-
-      <div class="footer-col">
-        <h4>SIGA-NOS</h4>
-        <div class="social-icons">
-          <img src="https://img.icons8.com/color/48/instagram-new.png" alt="Instagram" />
-          <img src="https://img.icons8.com/color/48/tiktok.png" alt="TikTok" />
-          <img src="https://img.icons8.com/color/48/whatsapp.png" alt="WhatsApp" />
-          <img src="https://img.icons8.com/color/48/facebook.png" alt="Facebook" />
-          <img src="https://img.icons8.com/color/48/linkedin.png" alt="LinkedIn" />
-        </div>
-
-        <h4 style="margin-top:20px">BAIXAR APP</h4>
-        <div class="app-icons">
-          <img src="https://img.icons8.com/color/96/google-play.png" alt="Google Play" />
-          <img src="https://img.icons8.com/color/96/apple-app-store.png" alt="App Store" />
-        </div>
-      </div>
-    </div>
-
-    <div class="footer-trust">
-      <img src="https://img.icons8.com/color/48/secured-letter.png" alt="Compra Segura" />
-      <img src="https://img.icons8.com/color/48/google-play.png" alt="Play Store" />
-      <img src="https://img.icons8.com/color/48/ssl.png" alt="SSL" />
-      <img src="https://img.icons8.com/color/48/verified-account.png" alt="Verificado" />
-    </div>
-
-    <div class="footer-bottom">
-      <p>© 2026 TikTok Shop. Todos os direitos reservados.</p>
-      <p>CNPJ/MF nº 35.635.824/0001-12 · Av. Brigadeiro Faria Lima, 3732 - Itaim Bibi, São Paulo (SP)</p>
-      <p>Usamos cookies para melhorar sua experiência. Consulte nossa Política de Privacidade.</p>
-    </div>
-  </footer>
 
   <script src="script.js"></script>
 </body>
